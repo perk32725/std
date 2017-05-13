@@ -1,5 +1,7 @@
 /*% gcc -g -Wall -O0 % -o #
  *
+ * basic std.c- the minimalist version
+ * 
  */
 
 #include <stdio.h>
