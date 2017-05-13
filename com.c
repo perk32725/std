@@ -28,15 +28,14 @@ main (int argc, char ** argv)
   else
     ++pgmname;
 
-  /* your code here:
-   */
-
   if (argc != 2)
     {
       printf ("%s: usage: %s c-file\n", pgmname, pgmname);
       return 1;
     }
 
+  /* open given file:
+   */
   inpfile = fopen (argv[1], "r");
   if (inpfile == NULL)
     {
@@ -44,52 +43,56 @@ main (int argc, char ** argv)
       return 1;
     }
 
+  /* init:
+   */
   memset (inpline, '\0', sizeof (inpline));
   memset (cmdline, '\0', sizeof (cmdline));
 
   fgets (inpline, sizeof(inpline), inpfile);
   fclose (inpfile);
 
+  /* check that first line:
+   */
   if (memcmp (inpline, "/*%", 3) != 0)
     {
       printf ("%s: first line should start with '/*%%'\n", pgmname);
       return 1;
     }
 
-  t = strchr (inpline, '\n');
+  t = strchr (inpline, '\n');	/* zap NL char */
   if (t != NULL)
     *t = '\0';
 
-  s = inpline + 4;
-  t = cmdline;
+  s = inpline + 4;		/* move past the first space */
+  t = cmdline;			/* point to cmdline we're building */
   while (*s != '\0')
     {
-      if (*s == '%')
+      if (*s == '%')		/* '%' translates to the file name */
         {
 	  strcat (t, argv[1]);
 	  t = cmdline + strlen (cmdline);
-	  ++s;
+	  ++s;			/* next char in input line */
 	}
 
-      if (*s == '#')
+      if (*s == '#')		/* '#' translates to file name w/o extension */
         {
 	  strcpy (t, argv[1]);
-	  u = strchr (t, '.');
+	  u = strchr (t, '.');	/* look for extension */
 	  if (u != NULL)
 	    {
-	      *u = '\0';
-	      t = u;
+	      *u = '\0';	/* zap extension */
+	      t = u;		/* save ptr */
 	    }
 	  else
 	    t = cmdline + strlen (cmdline);
 
-	  ++s;
+	  ++s;			/* move source up again */
 	}
 
-      *t++ = *s++;
+      *t++ = *s++;		/* copy char to target */
     }
 
-  return system (cmdline);
+  return system (cmdline);	/* do whatever we've built */
 }
 
 /*--------------------------------------------------------
