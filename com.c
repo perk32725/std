@@ -92,6 +92,7 @@ main (int argc, char ** argv)
       *t++ = *s++;		/* copy char to target */
     }
 
+  printf("%s\n", cmdline);
   return system (cmdline);	/* do whatever we've built */
 }
 
