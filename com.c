@@ -34,19 +34,18 @@ main (int argc, char ** argv)
       return 1;
     }
 
+  strcpy (inpline, argv[1]);
+  if ((strstr (inpline, ".c")) == NULL)
+    strcat (inpline, ".c");
+
   /* open given file:
    */
-  inpfile = fopen (argv[1], "r");
+  inpfile = fopen (inpline, "r");
   if (inpfile == NULL)
     {
       printf ("%s: couldn't fopen() %s: %s\n", pgmname, argv[1], strerror (errno));
       return 1;
     }
-
-  /* init:
-   */
-  memset (inpline, '\0', sizeof (inpline));
-  memset (cmdline, '\0', sizeof (cmdline));
 
   fgets (inpline, sizeof(inpline), inpfile);
   fclose (inpfile);
@@ -70,6 +69,9 @@ main (int argc, char ** argv)
       if (*s == '%')		/* '%' translates to the file name */
         {
 	  strcat (t, argv[1]);
+	  if ((strstr (t, ".c")) == NULL)
+	    strcat (t, ".c");
+
 	  t = cmdline + strlen (cmdline);
 	  ++s;			/* next char in input line */
 	}
