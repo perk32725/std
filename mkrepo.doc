@@ -1,0 +1,34 @@
+##!/bin/sh
+##
+## simple script to create a repo on gitlab
+##  without having to use a browser.
+##
+#
+#repo=$1
+#
+## taken from my local gitlab:
+#token=Z5GzQthpTBihzLVKALgF
+#
+#test -z $repo && echo "Repo name required." 1>&2 && exit 1
+#
+#echo
+#
+#returned=`curl --header "PRIVATE-TOKEN: $token" -X POST \
+#--data-urlencode "name=$repo" \
+#--data-urlencode 'visibility=internal' \
+#--data-urlencode 'default_branch=master' \
+#"http://gitlab:32775/api/v4/projects/"`			# if you want to see all the action
+##"http://gitlab:32775/api/v4/projects/" 2>/dev/null`	# if you don't weant to see all the action
+#
+#echo "$returned" | grep -q avatar_url
+#if [ $? -eq "0" ]; then
+#  echo "repo $repo created"
+#  echo $returned
+#else
+#  echo "something bad happened:"
+#  echo $returned
+#fi
+#
+#echo
+#
+## EOF:
