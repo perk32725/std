@@ -1,0 +1,44 @@
+# to clone a git project from github, use:
+git clone git@github.com:perk32725/<project name>.git
+
+# to update a git repository/project:
+git add -u		# update changed files
+# or
+# git add -A		# to add all files
+
+git commit -m "message"	# commit, with a description
+git push		# send to github
+
+# --- to start a brand-new git setup in a current work/project directory:
+git init		# intitialize repository
+git add .		# add all the files and such from here
+git commit -m "message"	# do the initial commit
+
+# Login via browser to github.com, create a new repository,
+# do NOT create a README.md or anything else.
+# Then,
+git remote add origin git@github.com:perk32725/<project or directory>.git
+git push -u origin <branch> # <branch> = master, devel, etc.
+
+# create the README.md for the project on the web browser
+git pull		# sync the local to the remote repository
+
+# Download from github to zipfile produces a zipfile with '-master' added
+# to project name, and unzipping produces 'project-master' directory with
+# all the files inside, just no .git directory to go with it,
+# suitable for deployment
+
+# to get a branch:
+git checkout <branch>
+
+# remove a local branch:
+git branch -d <branch>
+
+# to list branches:
+git branch [-l]
+
+# for a quickstart, see:
+https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/
+
+
+# EOF:

@@ -1,0 +1,82 @@
+To make GitLab easier to use, do the following:
+
+- add the following to your /etc/hosts file:
+192.168.44.25 gitlab
+(yes, this is Jupiter, we're just giving it a new "local" identity)
+
+- add the following to your ~/.ssh/config file:
+Host gitlab
+User <your user name>
+Port 32776
+(this will set up for easy ssh access to gitlab)
+
+You can now access gitlab:
+http://gitlab:32775
+
+Click on the "Register" tab
+Give yourself an identity there.
+
+Add git to your arsenal of tools.
+We likely have git pre-installed on our Macs, but if not,
+git can be found here:
+
+https://git-scm.com/download/mac
+
+Do this from the command line (if you haven't already):
+
+	git config --global user.name "your user name"
+	git config --global user.email "<username>@hearst.com"
+
+To create a new Repository:
+- Log in to our gitlab site
+- Click on "New project"
+- Give it a name under "Project name"
+- Give it an (optional) description
+- Set the visibilty level (I use "Internal" most of the time)
+- Click "Create Project"
+
+From here, you can follow any of the command line instructions to
+create a new repository, put an existing project/folder under git control,
+or move an existing git repository to our gitlab.
+
+My typical workflow, after creating a new repository on gitlab:
+	cd <project directory>
+	git init
+	git remote add origin git@gitlab:<username>/<project>.git
+	git add .
+	git commit -m "Initial commit"
+	git push -u origin master
+
+	git branch orig
+	git checkout orig
+	git push --set-upstream origin orig
+
+	git branch devel
+	git checkout devel
+	git push --set-upstream origin devel
+
+The project has it's original configuration in branches "master" and "orig",
+changes made will go to the "devel" branch.
+
+[Make your changes to the project]
+	git add <files>		# add files to the repository
+or
+	git add -A		# add all files, including new ones
+or
+	git add -u [files]	# update existing files
+
+	git commit -m "meaningful message"
+
+	git push		# push the changed files to gitlab
+
+To see what condition the local repository is in:
+	git status
+
+If you want to download a project from gitlab:
+	git clone git@gitlab.com:<username>/project.git
+
+I recommend creating a new branch at this point, if you want to
+make changes. Once your changes have been made and tested, you
+can send the new branch back up to the repository:
+	git push --set-upstream origin <new branch>
+
