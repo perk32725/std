@@ -35,20 +35,18 @@ main (int argc, char ** argv)
 
   /* get this program's name:
    */
-  pgmname = strrchr (argv[0], '/');
-  if (pgmname == NULL)
+  if ((pgmname = strrchr (argv[0], '/')) == NULL)
     pgmname = argv[0];
   else
     ++pgmname;
 
-  if ((s = strchr (pgmname, ".exe")) != NULL)
+  if ((s = strstr (pgmname, ".exe")) != NULL)
     *s = '\0';			/* for Windows-based systems */
 
   /* separate out the path:
    */
   strcpy (pgmpath, argv[0]);
-  s = strrchr (pgmpath, '/');
-  if (s)
+  if ((s = strrchr (pgmpath, '/')) != NULL)
     *(s + 1) = '\0';		/* leave the trailing '/' */
   else
     strcpy (pgmpath, "./");	/* set the program path to here */
@@ -60,6 +58,7 @@ main (int argc, char ** argv)
   strcat (ininame, ".ini");
   process_ini (ininame);
 
+  return 0;
 } /* end main() */
 
 /*-----------------------------------------------------------------------------
@@ -75,22 +74,19 @@ getfile (char * filename)
   int result;			/* for tracking results */
   char * buf;			/* where the file goes */
   
-  result = stat (filename, &fstat);
-  if (result != 0)
+  if ((result = stat (filename, &fstat)) != 0)
     {
       fprintf (stderr, "%s: getfile(): couldn't stat() %s: %s\n", pgmname, filename, strerror (errno));
       return NULL;
     }
 
-  buf = calloc (fstat.st_size + 1, 1);
-  if (buf == NULL)
+  if ((buf = calloc (fstat.st_size + 1, 1)) == NULL)
     {
       fprintf (stderr, "%s: getfile(): couldn't calloc() %ld bytes: %s\n", pgmname, fstat.st_size, strerror (errno));
       return NULL;
     }
 
-  inpfile = fopen (filename, "r");
-  if (inpfile == NULL)
+  if ((inpfile = fopen (filename, "r")) == NULL)
     {
       fprintf (stderr, "%s: getfile(): couldn't fopen() %s: %s\n", pgmname, filename, strerror (errno));
       free (buf);
@@ -131,23 +127,19 @@ process_ini(char * inifilename)
   /* first, try the current directory:
    */
   strcpy (inipath, inifilename);
-  iniptr = getfile (inipath);
-  if (iniptr == NULL)		/* couldn't find it in the current directory, try the program directory */
+  if ((iniptr = getfile (inipath)) == NULL) /* couldn't find it in the current directory, try the program directory */
     {
       strcpy (inipath, pgmpath);
       strcat (inipath, inifilename);
-      iniptr = getfile (inipath);
-      if (iniptr == NULL)	/* couldn't find it where the program lives. Try /etc: */
+      if ((iniptr = getfile (inipath)) == NULL)	/* couldn't find it where the program lives. Try /etc: */
 	{
 	  strcpy (inipath, "/etc/");
 	  strcat (inipath, inifilename);
-	  iniptr = getfile (inipath);
-	  if (iniptr == NULL)	/* not in /etc, try /usr/local/etc: */
+	  if ((iniptr = getfile (inipath)) == NULL) /* not in /etc, try /usr/local/etc: */
 	    {
 	      strcpy (inipath, "/usr/local/etc/");
 	      strcat (inipath, inifilename);
-	      iniptr = getfile (inipath);
-	      if (iniptr == NULL)	/* not anywhere. Complain, use defaults */
+	      if ((iniptr = getfile (inipath)) == NULL)	/* not anywhere. Complain, use defaults */
 		{
 		  fprintf (logfile, "%s: %s unavailable. Using defaults\n", logtime(), inifilename);
 		  fflush (logfile);
@@ -203,16 +195,14 @@ get_ini_entry (char * inibuffer, char * ini_entry, char * ini_target)
   if ((s = strstr (inibuffer, ini_entry)) == NULL)
     return;			/* not here, do nothing */
 
-  s = strchr (s, '"');
-  if (s == NULL)
+  if ((s = strchr (s, '"')) == NULL)
     {
       ini_error (ini_entry);
       return;
     }
 
   ++s;
-  t = strchr (s, '"');
-  if (t == NULL)
+  if ((t = strchr (s, '"')) == NULL)
     {
       ini_error (ini_entry);
       return;
